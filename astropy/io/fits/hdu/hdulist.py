@@ -964,19 +964,39 @@ class HDUList(list, _Verify):
         else:
             name = self._file.name
 
-        results = ['Filename: {}'.format(name),
-                   'No.    Name         Type      Cards   Dimensions   Format']
-
-        format = '{:3d}  {:10}  {:11}  {:5d}   {}   {}   {}'
+        titles = ('Name', 'Type', 'Cards', 'Dimensions', 'Format')
         default = ('', '', 0, (), '', '')
+
+        ruler = '-' * 80
+        fmt = '{0:<12}: {1:<15}'
+        fixed_width = 79
+        fixed_wrap_width = 66
+        fixed_wrap_indent = '\n' + ' ' * 14
+        results = ['#', '#' + name, '#']
+
         for idx, hdu in enumerate(self):
             summary = hdu._summary()
             if len(summary) < len(default):
                 summary += default[len(summary):]
-            summary = (idx,) + summary
+
             if output:
-                results.append(format.format(*summary))
+                results.append('')
+                results.append(fmt.format('HDR', idx))
+                results.append(ruler)
+                summary = summary
+
+                for title, value in zip(titles, summary):
+                    value = str(value)
+                    text = fmt.format(title, value)
+                    wraparound = len(text) > fixed_width
+
+                    if wraparound:
+                        value = fixed_wrap_indent.join(textwrap.wrap(value, width=fixed_wrap_width))
+                        text = fmt.format(title, value)
+
+                    results.append(text)
             else:
+                summary = (idx,) + summary
                 results.append(summary)
 
         if output:
@@ -984,7 +1004,7 @@ class HDUList(list, _Verify):
             output.write('\n')
             output.flush()
         else:
-            return results[2:]
+            return results[3:]
 
     def filename(self):
         """
