@@ -97,6 +97,11 @@ def write_wcsconfig_h(paths):
     #define NO_OLDNAMES
     #endif
 
+    #ifdef __STDC_WANT_SECURE_LIB__
+    #undef __STDC_WANT_SECURE_LIB__
+    #define __STDC_WANT_SECURE_LIB__ 0
+    #endif
+
     #ifndef __STDC__
     #define __STDC__ 1
     #endif
