@@ -224,6 +224,7 @@ def get_wcslib_cfg(cfg, wcslib_files, include_paths):
             ('_CRT_SECURE_NO_WARNINGS', None),
             ('_NO_OLDNAMES', None),  # for mingw32
             ('NO_OLDNAMES', None),  # for mingw64
+            ('__STDC_WANT_SECURE_LIB__', None),  # for MSVC
             ('__STDC__', None)  # for MSVC
         ])
 
